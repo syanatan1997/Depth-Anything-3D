@@ -134,6 +134,7 @@ def  main():
     generate_all_stereo_images(filenames, depth_paths, outdir, reverse)    
         
         
-        
+'''   
 if __name__ == "__main__":
     main()
+'''  
