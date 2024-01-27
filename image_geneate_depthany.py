@@ -63,8 +63,6 @@ def generate_depth(filenames, outdir):
     return depth_paths
 
 def generate_stereo_right(left_img, depth, reverse):
-    IPD = 6.5
-    MONITOR_W = 38.5
     h, w, c = left_img.shape
 
     # 深度マップの正規化をベクトル化
@@ -78,10 +76,14 @@ def generate_stereo_right(left_img, depth, reverse):
         # Full SBS
         normalized_depth = (depth_max - depth) / (depth_max - depth_min)
     
+    #IPD = 6.5
+    #MONITOR_W = 38.5
+    #deviation_cm = IPD * 0.12
+    #deviation = deviation_cm * MONITOR_W * (w / 1920)
+    #deviation_pixels = (normalized_depth ** 2) * deviation
+
     # 偏差の計算
-    deviation_cm = IPD * 0.12
-    deviation = deviation_cm * MONITOR_W * (w / 1920)
-    deviation_pixels = (normalized_depth ** 2) * deviation
+    deviation_pixels = normalized_depth * 30
 
     # 右画像の生成をベクトル化
     col_indices = np.clip(np.arange(w) - deviation_pixels.astype(int), 0, w - 1)
