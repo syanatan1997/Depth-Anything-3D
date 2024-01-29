@@ -162,6 +162,8 @@ cython_debug/
 models/**
 !models/README.md
 
-assets/**
-!assets/**/
-!/assets/**/Placeholder
+tmp/**
+!tmp/Placeholder
+
+result/**
+!result/Placeholder
