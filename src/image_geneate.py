@@ -137,9 +137,6 @@ def generate_stereo_video(filename, output_dir, encoder):
     base_filename = os.path.basename(filename)
     output_path = os.path.join(output_dir, base_filename[:base_filename.rfind('.')] + '_video_depth.mp4')
     out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*"mp4v"), frame_rate, (output_width, frame_height))
-    
-    depth_frames = []  # depth画像を格納するリスト
-    raw_image_frames = []  # 元のフレームを格納するリスト
 
     with tqdm() as pbar:
         while raw_video.isOpened():
@@ -147,7 +144,6 @@ def generate_stereo_video(filename, output_dir, encoder):
             if not ret:
                 break
             
-            raw_image_frames.append(raw_frame)
             frame = cv2.cvtColor(raw_frame, cv2.COLOR_BGR2RGB) / 255.0
             
             frame = transform({'image': frame})['image']
@@ -159,19 +155,16 @@ def generate_stereo_video(filename, output_dir, encoder):
             depth = F.interpolate(depth[None], (frame_height, frame_width), mode='bilinear', align_corners=False)[0, 0]
             depth = (depth - depth.min()) / (depth.max() - depth.min()) * 255.0
             
-            depth = depth.cpu().numpy().astype(np.uint8)
-            depth_frames.append(depth)
+            depth_frame = depth.cpu().numpy().astype(np.uint8)
+
+            right_image = generate_right_image(raw_frame, depth_frame, False)
+            combined_frame = cv2.hconcat([raw_frame, right_image])
+            out.write(combined_frame)
             
             pbar.update(1)
         
-        print("Depth Finished")
-    
-    for raw_image_frame, depth_frame in tqdm(zip(raw_image_frames, depth_frames)):
-        right_image = generate_right_image(raw_image_frame, depth_frame, False)
-        combined_frame = cv2.hconcat([raw_image_frame, right_image])
-        out.write(combined_frame)
-    print("Stereo finished")
-    
+        
+    print("Stereo Video Encode Finished")
     raw_video.release()
     out.release()
     

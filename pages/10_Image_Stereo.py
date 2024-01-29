@@ -20,7 +20,7 @@ if(st.button("3D画像生成実行")):
 
 
     image_files = ImageGenerate.get_image_filenames(input_dir)
-    depth_files = ImageGenerate.generate_depth(image_files, output_depth_path, model_name)
+    depth_files = ImageGenerate.generate_depth_image(image_files, output_depth_path, model_name)
     ImageGenerate.generate_all_stereo_images(image_files, depth_files, output_stereo_path, reverse)
     
     st.write("実行完了")
