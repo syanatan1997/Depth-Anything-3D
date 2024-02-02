@@ -9,8 +9,7 @@ temp_folder = "./tmp"
 result_folder = "./result"
 
 uploaded_files = st.file_uploader("アップロード画像選択", type=["jpg", "png"], accept_multiple_files=True)
-
-
+download_file_name = st.text_input("ダウンロードファイル名")
 encoder = st.selectbox("モデル", options=['vits', 'vitb', 'vitl'])
 reverse = st.checkbox("Reverse SBS有効化")
 
@@ -42,7 +41,7 @@ if(st.button("3D画像生成実行")):
     image_generate.set_output_directory(output_dir)
     image_generate.generate_stereo_image()
 
-    zip_basename = utils.generate_random_string(10)
+    zip_basename = download_file_name
     zip_filename = os.path.join(result_folder, zip_basename + '.zip')
     shutil.make_archive(os.path.join(result_folder, zip_basename), 'zip', output_dir)
 

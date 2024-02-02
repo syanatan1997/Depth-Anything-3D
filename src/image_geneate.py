@@ -132,13 +132,13 @@ class ImageGenerate(SetGenerate):
 
     # Combine Raw Image and Right Image to generate Stereo Image
     def generate_stereo_image(self):
-        for image_filename in self.image_filenames:
+        for image_filename in tqdm(self.image_filenames, desc="Generating stereo images"):
             raw_image = cv2.imread(image_filename)
 
             depth_image = ImageGenerate.generate_depth_image(self, raw_image)
             right_image = ImageGenerate.generate_right_image(self, raw_image, depth_image)
             
-            stereo = np.hstack([raw_image, right_image])
+            stereo = cv2.hconcat([raw_image, right_image])
            
             suffix_stereo = 'r_sbs_img_' if self.reverse else 'sbs_img_'
             suffix_depth = 'depth_img_'
@@ -146,7 +146,7 @@ class ImageGenerate(SetGenerate):
             depth_image_path = os.path.join(self.output_dir, suffix_depth + os.path.basename(image_filename).split('.')[0] + extension)
             stereo_image_path = os.path.join(self.output_dir, suffix_stereo + os.path.basename(image_filename).split('.')[0] + extension)
 
-            cv2.imwrite(depth_image_path, depth_image)
+            #cv2.imwrite(depth_image_path, depth_image)
             cv2.imwrite(stereo_image_path, stereo)
 
     
