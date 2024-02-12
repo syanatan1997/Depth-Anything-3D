@@ -10,6 +10,10 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 ```
 
 ## 実行方法
+1. Streamlitを起動させる。
 ```
 streamlit run app.py
 ```
+
+2. Webブラウザからセットアップを実行する。resultフォルダ、tmpフォルダが作成される。
+

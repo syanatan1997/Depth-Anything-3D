@@ -1,5 +1,7 @@
-torch
-torchvision
-opencv-python
-huggingface_hub
-streamlit
+torch==2.1.2+cu118
+torchaudio==2.1.2+cu118
+torchvision==0.16.2
+opencv-python==4.9.0.80
+huggingface-hub==0.20.3
+streamlit==1.30.0
+cupy-cuda11x==13.0.0
